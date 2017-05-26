@@ -77,6 +77,17 @@ public class ConcreteProcessor extends AbstractProcessor
 					return false;
 				}
 
+				final PrimitiveType.Code primitiveTypeCode;
+
+				if (concrete.type().equals("int"))
+				{
+					primitiveTypeCode = PrimitiveType.INT;
+				} else
+				{
+					processingEnv.getMessager().printMessage(Kind.ERROR, "The given type \"" + concrete.type() + "\" is not supported");
+					return false;
+				}
+
 				TypeElement type = (TypeElement)elm;
 				final String className = type.getSimpleName().toString();
 				ClassTree clTree = trees.getTree(type);
@@ -114,7 +125,7 @@ public class ConcreteProcessor extends AbstractProcessor
 					@Override
 					public boolean visit(FieldDeclaration node)
 					{
-						rewrite.set(node, FieldDeclaration.TYPE_PROPERTY, ast.newPrimitiveType(PrimitiveType.INT), null);
+						rewrite.set(node, FieldDeclaration.TYPE_PROPERTY, ast.newPrimitiveType(primitiveTypeCode), null);
 						return super.visit(node);
 					}
 
