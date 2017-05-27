@@ -25,6 +25,22 @@ public class ConcreteTest
 	"\t}\n"+
 	"}\n";
 
+	private final static String SINGLE_SRC_ONE_TYPE_SOME_OTHERS =
+	"import de.sonumina.concrete.Concrete;\n" +
+	"\n" +
+	"@Concrete(name=\"SingleInt\", type=\"int\")\n" +
+	"public class Single<T>\n" +
+	"{\n" +
+	"\tprivate long count;\n"+
+	"\tprivate T t;\n"+
+	"\n" +
+	"\tpublic T get()\n" +
+	"\t{\n" +
+	"\t\tcount++;\n" +
+	"\t\treturn t;\n"+
+	"\t}\n"+
+	"}\n";
+
 	private final static String SINGLE_SRC_TWO_TYPES =
 	"import de.sonumina.concrete.Concrete;\n" +
 	"\n" +
@@ -49,6 +65,14 @@ public class ConcreteTest
 	}
 
 	@Test
+	public void testConcreteWorksMoreFields()
+	{
+		assertAbout(javaSource())
+			.that(JavaFileObjects.forSourceString("Single", SINGLE_SRC_ONE_TYPE_SOME_OTHERS)).withCompilerOptions("-verbose")
+			.processedWith(new ConcreteProcessor())
+			.compilesWithoutError();
+	}
+
 	public void testConcreteFailure()
 	{
 		assertAbout(javaSource())

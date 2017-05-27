@@ -125,7 +125,11 @@ public class ConcreteProcessor extends AbstractProcessor
 					@Override
 					public boolean visit(FieldDeclaration node)
 					{
-						rewrite.set(node, FieldDeclaration.TYPE_PROPERTY, ast.newPrimitiveType(primitiveTypeCode), null);
+						Type t = node.getType();
+						if (t.isSimpleType())
+						{
+							rewrite.set(node, FieldDeclaration.TYPE_PROPERTY, ast.newPrimitiveType(primitiveTypeCode), null);
+						}
 						return super.visit(node);
 					}
 
