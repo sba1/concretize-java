@@ -41,6 +41,30 @@ public class ConcreteTest
 	"\t}\n"+
 	"}\n";
 
+	private final static String IMMUTABLE_ARRAY_SRC =
+	"import de.sonumina.concrete.Concrete;\n" +
+	"\n" +
+	"@Concrete(name=\"ImmutableIntArray\", type=\"int\")\n" +
+	"public final class ImmutableArray<T>\n" +
+	"{\n" +
+	"\tprivate T [] array;\n"+
+	"\n" +
+	"\tprivate ImmutableArray(T [] array)\n"+
+	"\t{\n"+
+	"\t\tthis.array = array;"+
+	"\t}\n"+
+	"\n"+
+	"\tpublic int length()\n"+
+	"\t{\n"+
+	"\t\treturn array.length;\n"+
+	"\t}"+
+	"\n"+
+	"\tpublic T get(int i)\n"+
+	"\t{"+
+	"\t\treturn array[i];\n"+
+	"\t}"+
+	"}";
+
 	private final static String SINGLE_SRC_TWO_TYPES =
 	"import de.sonumina.concrete.Concrete;\n" +
 	"\n" +
@@ -69,6 +93,15 @@ public class ConcreteTest
 	{
 		assertAbout(javaSource())
 			.that(JavaFileObjects.forSourceString("Single", SINGLE_SRC_ONE_TYPE_SOME_OTHERS)).withCompilerOptions("-verbose")
+			.processedWith(new ConcreteProcessor())
+			.compilesWithoutError();
+	}
+
+	@Test
+	public void testConcreteWorksImmutableArray()
+	{
+		assertAbout(javaSource())
+			.that(JavaFileObjects.forSourceString("ImmutableArray", IMMUTABLE_ARRAY_SRC)).withCompilerOptions("-verbose")
 			.processedWith(new ConcreteProcessor())
 			.compilesWithoutError();
 	}
